@@ -3,6 +3,7 @@ import 'package:flash_chat/utils/constants.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
+  static const routName = '/chat';
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
