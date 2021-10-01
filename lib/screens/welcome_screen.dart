@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
+import '/widgets/rounded_button.dart';
 import 'login_screen.dart';
 import 'registration_screen.dart';
 
@@ -32,12 +33,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     height: 60.0,
                   ),
                 ),
-<<<<<<< HEAD
                 AnimatedTextKit(
-                  totalRepeatCount: 20,
                   animatedTexts: [
-                    FlickerAnimatedText(
-                      'Flash chat',
+                    WavyAnimatedText(
+                      'Flash Chat',
                       textStyle: const TextStyle(
                         fontSize: 45.0,
                         fontWeight: FontWeight.w900,
@@ -45,56 +44,23 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       ),
                     ),
                   ],
-=======
-                const Text(
-                  'Flash Chat',
-                  style: TextStyle(
-                    fontSize: 45.0,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.black54,
-                  ),
->>>>>>> parent of 1749ea3 (Refactor)
+                  pause: const Duration(seconds: 2),
+                  repeatForever: true,
                 ),
               ],
             ),
             const SizedBox(
               height: 48.0,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                elevation: 5.0,
-                color: Colors.lightBlueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, LoginScreen.routName);
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: const Text(
-                    'Log In',
-                  ),
-                ),
-              ),
+            RoundedButton(
+              title: 'Login',
+              color: Colors.blueAccent,
+              onPressed: () => Navigator.pushNamed(context, LoginScreen.routName),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Material(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(30.0),
-                elevation: 5.0,
-                child: MaterialButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, RegistrationScreen.routName);
-                  },
-                  minWidth: 200.0,
-                  height: 42.0,
-                  child: const Text(
-                    'Register',
-                  ),
-                ),
-              ),
+            RoundedButton(
+              color: Colors.blueAccent,
+              title: 'Register',
+              onPressed: () => Navigator.pushNamed(context, RegistrationScreen.routName),
             ),
           ],
         ),
