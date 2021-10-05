@@ -7,8 +7,6 @@ import 'screens/welcome_screen.dart';
 import 'screens/login_screen.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp;
   runApp(const FlashChat());
 }
 
@@ -37,15 +35,6 @@ class FlashChat extends StatelessWidget {
         }
         return loading();
       },
-      // child: MaterialApp(
-      //   initialRoute: WelcomeScreen.routName,
-      //   routes: {
-      //     WelcomeScreen.routName: (ctx) => const WelcomeScreen(),
-      //     LoginScreen.routName: (ctx) => const LoginScreen(),
-      //     RegistrationScreen.routName: (ctx) => const RegistrationScreen(),
-      //     ChatScreen.routName: (ctx) => const ChatScreen(),
-      //   },
-      // ),
     );
   }
 }
