@@ -1,4 +1,3 @@
-import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,7 +6,6 @@ import '/utils/constants.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
-  static const routName = '/chat';
 
   @override
   _ChatScreenState createState() => _ChatScreenState();

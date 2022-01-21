@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-import 'screens/chat_screen.dart';
-import 'screens/registration_screen.dart';
-import 'screens/welcome_screen.dart';
-import 'screens/login_screen.dart';
+import 'config/route.dart' as route;
 
 void main() async {
   runApp(const FlashChat());
@@ -23,14 +20,9 @@ class FlashChat extends StatelessWidget {
         }
 
         if (snapshot.connectionState == ConnectionState.done) {
-          return MaterialApp(
-            initialRoute: WelcomeScreen.routName,
-            routes: {
-              WelcomeScreen.routName: (ctx) => const WelcomeScreen(),
-              LoginScreen.routName: (ctx) => const LoginScreen(),
-              RegistrationScreen.routName: (ctx) => const RegistrationScreen(),
-              ChatScreen.routName: (ctx) => const ChatScreen(),
-            },
+          return const MaterialApp(
+            onGenerateRoute: route.controller,
+            initialRoute: route.welcomePage,
           );
         }
         return loading();
