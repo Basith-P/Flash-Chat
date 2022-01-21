@@ -25,12 +25,8 @@ class FlashChat extends StatelessWidget {
             initialRoute: route.welcomePage,
           );
         }
-        return loading();
+        return const Center(child: CircularProgressIndicator());
       },
     );
   }
-}
-
-Widget loading() {
-  return const Text('lOADING');
 }
