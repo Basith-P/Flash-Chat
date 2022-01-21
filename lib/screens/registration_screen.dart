@@ -5,11 +5,9 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../config/route.dart' as route;
 import '/widgets/rounded_button.dart';
 import '/utils/constants.dart';
-import '/screens/chat_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
-  static const routName = '/registration';
 
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
@@ -73,12 +71,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   try {
                     final newUser = await _auth.createUserWithEmailAndPassword(
                         email: email!, password: password!);
-                    Navigator.pushNamed(context, route.chatPage);
+                    Navigator.pushReplacementNamed(context, route.chatPage);
+                  } catch (e) {
+                    print(e);
+                  } finally {
                     setState(() {
                       showSpinner = false;
                     });
-                  } catch (e) {
-                    print(e);
                   }
                 },
               )

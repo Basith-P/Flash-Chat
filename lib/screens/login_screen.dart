@@ -5,11 +5,9 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import '../config/route.dart' as route;
 import '/widgets/rounded_button.dart';
 import '/utils/constants.dart';
-import '/screens/chat_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
-  static const routName = '/login';
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -76,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   try {
                     final user =
                         await _auth.signInWithEmailAndPassword(email: email, password: password);
-                    Navigator.pushNamed(context, route.chatPage);
+                    Navigator.pushReplacementNamed(context, route.chatPage);
                     setState(() {
                       showSpinner = false;
                     });

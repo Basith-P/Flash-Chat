@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
 import '/widgets/rounded_button.dart';
-import 'login_screen.dart';
-import 'registration_screen.dart';
+import '../config/route.dart' as route;
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({Key? key}) : super(key: key);
@@ -55,12 +54,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             RoundedButton(
               title: 'Login',
               color: Colors.blueAccent,
-              onPressed: () => Navigator.pushNamed(context, LoginScreen.routName),
+              onPressed: () => Navigator.pushNamed(context, route.loginPage),
             ),
             RoundedButton(
               color: Colors.blueAccent,
               title: 'Register',
-              onPressed: () => Navigator.pushNamed(context, RegistrationScreen.routName),
+              onPressed: () => Navigator.pushNamed(context, route.regPage),
             ),
           ],
         ),

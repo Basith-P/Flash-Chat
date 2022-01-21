@@ -66,9 +66,34 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            StreamBuilder<QuerySnapshot>(
+              stream: _firestore.collection('messages').snapshots(),
+              builder: (BuildContext context, snapshot) {
+                List<Text> msgWidgets = [];
+                if (snapshot.hasError) {
+                  return Center(child: Text(snapshot.error.toString()));
+                } else if (!snapshot.hasData) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  final messages = snapshot.data!.docs;
+                  for (var msg in messages) {
+                    final message = msg.data() as Map<String, dynamic>;
+                    final msgText = message['text'];
+                    final msgSender = message['sender'];
+                    final msgWidget = Text('$msgText from $msgSender');
+                    msgWidgets.add(msgWidget);
+                  }
+                }
+                return SingleChildScrollView(
+                  child: Column(
+                    children: msgWidgets,
+                  ),
+                );
+              },
+            ),
+            const Spacer(),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
