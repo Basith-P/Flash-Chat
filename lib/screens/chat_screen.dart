@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '/utils/constants.dart';
+import '../utils/constants.dart';
+import '../widgets/msg_bubble.dart';
+
+final _firestore = FirebaseFirestore.instance;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -14,6 +17,9 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final _firestore = FirebaseFirestore.instance;
   final _auth = FirebaseAuth.instance;
+
+  final msgTextController = TextEditingController();
+
   late User loggedinUser;
   late String messageText;
 
@@ -68,32 +74,7 @@ class _ChatScreenState extends State<ChatScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('messages').snapshots(),
-              builder: (BuildContext context, snapshot) {
-                List<Text> msgWidgets = [];
-                if (snapshot.hasError) {
-                  return Center(child: Text(snapshot.error.toString()));
-                } else if (!snapshot.hasData) {
-                  return const Center(child: CircularProgressIndicator());
-                } else {
-                  final messages = snapshot.data!.docs;
-                  for (var msg in messages) {
-                    final message = msg.data() as Map<String, dynamic>;
-                    final msgText = message['text'];
-                    final msgSender = message['sender'];
-                    final msgWidget = Text('$msgText from $msgSender');
-                    msgWidgets.add(msgWidget);
-                  }
-                }
-                return SingleChildScrollView(
-                  child: Column(
-                    children: msgWidgets,
-                  ),
-                );
-              },
-            ),
-            const Spacer(),
+            const MsgStream(),
             Container(
               decoration: kMessageContainerDecoration,
               child: Row(
@@ -101,6 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      controller: msgTextController,
                       onChanged: (value) {
                         messageText = value;
                       },
@@ -109,6 +91,7 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   TextButton(
                     onPressed: () {
+                      msgTextController.clear();
                       _firestore.collection('messages').add({
                         'text': messageText,
                         'sender': loggedinUser.email,
@@ -125,6 +108,43 @@ class _ChatScreenState extends State<ChatScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class MsgStream extends StatelessWidget {
+  const MsgStream({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: _firestore.collection('messages').snapshots(),
+      builder: (BuildContext context, snapshot) {
+        List<MsgBubble> msgBubbles = [];
+        if (snapshot.hasError) {
+          return Center(child: Text(snapshot.error.toString()));
+        } else if (!snapshot.hasData) {
+          return const Center(child: CircularProgressIndicator());
+        } else {
+          final messages = snapshot.data!.docs;
+          for (var msg in messages) {
+            final message = msg.data() as Map<String, dynamic>;
+            final msgText = message['text'];
+            final msgSender = message['sender'];
+            msgBubbles.add(MsgBubble(
+              text: msgText,
+              sender: msgSender,
+            ));
+          }
+        }
+        return Expanded(
+          child: ListView(
+            padding: const EdgeInsets.all(15),
+            physics: const BouncingScrollPhysics(),
+            children: msgBubbles,
+          ),
+        );
+      },
     );
   }
 }
