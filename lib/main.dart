@@ -23,7 +23,7 @@ class FlashChat extends StatelessWidget {
           return const MaterialApp(
             debugShowCheckedModeBanner: false,
             onGenerateRoute: route.controller,
-            initialRoute: route.chatPage,
+            initialRoute: route.welcomePage,
           );
         }
         return Container();
