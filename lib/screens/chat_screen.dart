@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../config/route.dart' as route;
 import '../utils/constants.dart';
 import '../widgets/msg_bubble.dart';
 
 final _firestore = FirebaseFirestore.instance;
+late User loggedinUser;
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({Key? key}) : super(key: key);
@@ -20,7 +22,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   final msgTextController = TextEditingController();
 
-  late User loggedinUser;
   late String messageText;
 
   @override
@@ -38,21 +39,6 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  // void getMessages() async {
-  //   var messages = await _firestore.collection('messages').get();
-  //   for (var msg in messages.docs) {
-  //     print(msg.data);
-  //   }
-  // }
-
-  void messageStream() async {
-    await for (var snapshot in _firestore.collection('messages').snapshots()) {
-      for (var msg in snapshot.docs) {
-        print(msg.data());
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,9 +48,8 @@ class _ChatScreenState extends State<ChatScreen> {
           IconButton(
               icon: const Icon(Icons.close),
               onPressed: () {
-                // _auth.signOut();
-                // Navigator.pushNamed(context, LoginScreen.routName);
-                messageStream();
+                _auth.signOut();
+                Navigator.pushNamed(context, route.loginPage);
               }),
         ],
         title: const Text('⚡️Chat'),
@@ -95,6 +80,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       _firestore.collection('messages').add({
                         'text': messageText,
                         'sender': loggedinUser.email,
+                        'time': DateTime.now().toIso8601String(),
                       });
                     },
                     child: const Text(
@@ -126,19 +112,25 @@ class MsgStream extends StatelessWidget {
         } else if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
         } else {
-          final messages = snapshot.data!.docs;
+          final messages = snapshot.data!.docs.reversed;
           for (var msg in messages) {
             final message = msg.data() as Map<String, dynamic>;
             final msgText = message['text'];
             final msgSender = message['sender'];
-            msgBubbles.add(MsgBubble(
-              text: msgText,
-              sender: msgSender,
-            ));
+            final msgTime = message['time'];
+            msgBubbles.add(
+              MsgBubble(
+                text: msgText,
+                sender: msgSender,
+                isMe: msgSender == loggedinUser.email,
+                time: msgTime,
+              ),
+            );
           }
         }
         return Expanded(
           child: ListView(
+            reverse: true,
             padding: const EdgeInsets.all(15),
             physics: const BouncingScrollPhysics(),
             children: msgBubbles,

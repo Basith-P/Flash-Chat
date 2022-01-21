@@ -21,11 +21,12 @@ class FlashChat extends StatelessWidget {
 
         if (snapshot.connectionState == ConnectionState.done) {
           return const MaterialApp(
+            debugShowCheckedModeBanner: false,
             onGenerateRoute: route.controller,
             initialRoute: route.chatPage,
           );
         }
-        return const Center(child: CircularProgressIndicator());
+        return Container();
       },
     );
   }

@@ -31,11 +31,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              Hero(
-                tag: 'logo',
-                child: SizedBox(
-                  height: 200.0,
-                  child: Image.asset('assets/images/logo.png'),
+              Flexible(
+                child: Hero(
+                  tag: 'logo',
+                  child: SizedBox(
+                    height: 200.0,
+                    child: Image.asset('assets/images/logo.png'),
+                  ),
                 ),
               ),
               const SizedBox(
@@ -45,7 +47,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 keyboardType: TextInputType.emailAddress,
                 textAlign: TextAlign.center,
                 onChanged: (value) {
-                  email = value;
+                  email = value.trim();
                 },
                 decoration: kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
               ),
